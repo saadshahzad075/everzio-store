@@ -3,6 +3,7 @@ import { TrustStrip } from "@/components/home/TrustStrip";
 import { CategoryGrid } from "@/components/home/CategoryGrid";
 import { ProductSection } from "@/components/home/ProductSection";
 import { FlashDealTimer } from "@/components/home/FlashDealTimer";
+import { HotspotBanner } from "@/components/home/HotspotBanner";
 import { CampaignBanner } from "@/components/home/CampaignBanner";
 import { SocialProof } from "@/components/home/SocialProof";
 import { InstagramGrid } from "@/components/home/InstagramGrid";
@@ -35,6 +36,9 @@ export default function HomePage() {
           filter="trending"
           viewAllHref="/shop?filter=trending"
         />
+
+        {/* Interactive Hotspot Lookbook Showcase */}
+        <HotspotBanner />
 
         {/* Campaign Banner */}
         <CampaignBanner />
