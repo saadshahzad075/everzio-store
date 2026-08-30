@@ -44,7 +44,8 @@ screenshots/
 scripts/
 src/
 stack/
- skill.json
+skill.json
+
 .releaserc.json
 AGENTS.md
 CLAUDE.md
