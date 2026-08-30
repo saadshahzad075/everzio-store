@@ -25,7 +25,7 @@ export function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const { totalItems, openCart } = useCart();
-  const { totalItems: wishlistCount } = useWishlist();
+  const { count: wishlistCount } = useWishlist();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
