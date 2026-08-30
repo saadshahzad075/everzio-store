@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 import { useWishlist } from "@/hooks/useWishlist";
-import { getProductBySlug, getRelatedProducts } from "@/lib/data";
+import { getProductBySlug, getRelatedProducts, type ProductVariant } from "@/lib/data";
 import { cn, buildWhatsAppUrl, buildProductWhatsAppMessage } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
 import { Price } from "@/components/ui/Price";
@@ -185,7 +185,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
               {/* Thumbnails */}
               {product.images.length > 1 && (
                 <div className="flex gap-2">
-                  {product.images.map((img, i) => (
+                  {product.images.map((img: string, i: number) => (
                     <button
                       key={i}
                       onClick={() => setActiveImage(i)}
@@ -264,7 +264,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
                     </span>
                   </p>
                   <div className="flex flex-wrap gap-2" role="group" aria-label="Select variant">
-                    {product.variants.map((variant) => (
+                    {product.variants.map((variant: ProductVariant) => (
                       <button
                         key={variant.id}
                         onClick={() => setSelectedVariant(variant)}

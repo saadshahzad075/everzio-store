@@ -1,87 +1,79 @@
-import type { Metadata } from "next";
-import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
-import { Navbar } from "@/components/layout/Navbar";
-import { CartDrawer } from "@/components/layout/CartDrawer";
-import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/home/Hero";
 import { TrustStrip } from "@/components/home/TrustStrip";
 import { CategoryGrid } from "@/components/home/CategoryGrid";
 import { ProductSection } from "@/components/home/ProductSection";
+import { FlashDealTimer } from "@/components/home/FlashDealTimer";
 import { CampaignBanner } from "@/components/home/CampaignBanner";
 import { SocialProof } from "@/components/home/SocialProof";
+import { InstagramGrid } from "@/components/home/InstagramGrid";
 import { Newsletter } from "@/components/home/Newsletter";
-import { COLLECTIONS } from "@/lib/data";
-
-export const metadata: Metadata = {
-  title: "EVERZIO — Premium Lifestyle Products",
-  description:
-    "Discover premium home, kitchen, electronics, and lifestyle products at EVERZIO. Smart choices, delivered simply. Free delivery & COD across Pakistan.",
-  alternates: { canonical: "/" },
-};
+import { PromoModal } from "@/components/ui/PromoModal";
+import { WhatsAppFloating } from "@/components/ui/WhatsAppFloating";
 
 export default function HomePage() {
   return (
     <>
-      {/* Sticky top elements */}
-      <AnnouncementBar />
-      <Navbar />
-      <CartDrawer />
-
       <main id="main-content">
-        {/* 1. Cinematic hero */}
+        {/* Cinematic Hero */}
         <Hero />
 
-        {/* 2. Trust strip */}
+        {/* Marquee Trust Highlights */}
         <TrustStrip />
 
-        {/* 3. Trending products */}
-        <ProductSection
-          title="Trending Now"
-          badge="What's Hot"
-          subtitle="The products everyone's talking about this week."
-          products={COLLECTIONS.trending}
-          viewAllHref="/shop?filter=trending"
-          viewAllLabel="See all trending"
-          cols={4}
-        />
+        {/* Flash Sale Countdown Timer Banner */}
+        <FlashDealTimer />
 
-        {/* 4. Category grid */}
+        {/* Category Grid */}
         <CategoryGrid />
 
-        {/* 5. Campaign banner */}
+        {/* Trending Now */}
+        <ProductSection
+          id="trending-now"
+          title="Trending Now"
+          subtitle="The products everyone's talking about this week."
+          badgeText="What's Hot"
+          filter="trending"
+          viewAllHref="/shop?filter=trending"
+        />
+
+        {/* Campaign Banner */}
         <CampaignBanner />
 
-        {/* 6. Best sellers */}
+        {/* Best Sellers */}
         <ProductSection
-          title="Best Sellers"
-          badge="Top Rated"
-          subtitle="Our most loved products, tried and trusted by thousands."
-          products={COLLECTIONS.bestsellers}
+          id="best-sellers"
+          title="Most Loved & Best Sellers"
+          subtitle="Customer favorites backed by 5-star verified reviews."
+          badgeText="Top Rated"
+          filter="bestsellers"
           viewAllHref="/shop?filter=bestsellers"
-          viewAllLabel="Shop best sellers"
-          cols={4}
-          bgAlt
         />
 
-        {/* 7. New arrivals */}
-        <ProductSection
-          title="New Arrivals"
-          badge="Just In"
-          subtitle="Fresh products added this week."
-          products={COLLECTIONS.newArrivals}
-          viewAllHref="/shop?filter=new"
-          viewAllLabel="See new arrivals"
-          cols={4}
-        />
-
-        {/* 8. Social proof / reviews */}
+        {/* Social Proof Reviews */}
         <SocialProof />
 
-        {/* 9. Newsletter + WhatsApp */}
+        {/* New Arrivals */}
+        <ProductSection
+          id="new-arrivals"
+          title="Fresh New Arrivals"
+          subtitle="Just landed items designed to elevate your everyday."
+          badgeText="Just In"
+          filter="new"
+          viewAllHref="/shop?filter=new"
+        />
+
+        {/* Instagram Lookbook Showcase */}
+        <InstagramGrid />
+
+        {/* Newsletter CTA */}
         <Newsletter />
       </main>
 
-      <Footer />
+      {/* Welcome Discount Modal */}
+      <PromoModal />
+
+      {/* Persistent Floating WhatsApp Order Button */}
+      <WhatsAppFloating />
     </>
   );
 }
