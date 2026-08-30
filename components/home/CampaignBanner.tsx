@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Tag } from "lucide-react";
+import { ArrowRight, Sparkles, Flame } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { FadeIn } from "@/components/motion/FadeIn";
 
@@ -9,89 +9,89 @@ export function CampaignBanner() {
       <div className="everzio-container">
         <FadeIn>
           <div
-            className="relative overflow-hidden rounded-[--radius-2xl] min-h-[320px] md:min-h-[400px] flex items-center"
+            className="relative overflow-hidden rounded-[--radius-2xl] min-h-[360px] md:min-h-[440px] flex items-center shadow-2xl border border-amber-500/20"
             style={{
               background: `
-                linear-gradient(135deg, #1C1917 0%, #292524 40%, #1C1917 100%)
+                linear-gradient(135deg, #090D16 0%, #1E1B4B 50%, #090D16 100%)
               `,
             }}
           >
-            {/* Background accent */}
+            {/* Ambient Lighting Gradients */}
             <div
               className="absolute inset-0 pointer-events-none"
               aria-hidden="true"
               style={{
                 background: `
-                  radial-gradient(ellipse 70% 80% at 80% 50%, rgba(202,138,4,0.2) 0%, transparent 70%),
-                  radial-gradient(ellipse 40% 60% at 15% 30%, rgba(161,98,7,0.12) 0%, transparent 60%)
+                  radial-gradient(ellipse 65% 75% at 85% 50%, rgba(245,158,11,0.25) 0%, transparent 70%),
+                  radial-gradient(ellipse 45% 65% at 15% 30%, rgba(217,119,6,0.18) 0%, transparent 60%)
                 `,
               }}
             />
 
-            {/* Geometric accent lines */}
+            {/* Geometric Accent Rings */}
             <div className="absolute right-0 top-0 bottom-0 w-1/2 pointer-events-none overflow-hidden" aria-hidden="true">
-              <div
-                className="absolute right-[-80px] top-[-80px] w-96 h-96 rounded-full border border-white/5"
-              />
-              <div
-                className="absolute right-[-40px] top-[-40px] w-64 h-64 rounded-full border border-white/5"
-              />
-              <div
-                className="absolute right-12 top-1/2 -translate-y-1/2 w-32 h-32 rounded-full border border-[--color-accent]/20"
-              />
+              <div className="absolute right-[-100px] top-[-100px] w-[450px] h-[450px] rounded-full border border-white/10" />
+              <div className="absolute right-[-40px] top-[-40px] w-80 h-80 rounded-full border border-amber-500/20" />
+              <div className="absolute right-16 top-1/2 -translate-y-1/2 w-44 h-44 rounded-full border border-amber-400/30 blur-sm" />
             </div>
 
             {/* Content */}
-            <div className="relative z-10 p-8 md:p-12 max-w-lg">
+            <div className="relative z-10 p-8 md:p-14 max-w-xl">
               {/* Campaign badge */}
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[--radius-pill] bg-[--color-accent]/20 border border-[--color-accent]/30 text-[--color-accent-alt] text-xs font-semibold uppercase tracking-wider mb-4">
-                <Tag size={10} aria-hidden="true" />
-                Limited Time Deal
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-[--radius-pill] bg-amber-500/20 border border-amber-400/30 text-amber-300 text-xs font-bold uppercase tracking-wider mb-5 backdrop-blur-md">
+                <Flame size={14} className="text-amber-400" aria-hidden="true" />
+                Limited Time Flash Sale
               </span>
 
               <h2
-                className="font-display text-white text-3xl md:text-5xl font-bold leading-[1.05] mb-4"
+                className="font-display text-white text-3xl md:text-5xl lg:text-6xl font-bold leading-[1.04] mb-4"
                 style={{ fontFamily: "var(--font-display)" }}
               >
                 Up to{" "}
-                <span style={{ color: "var(--color-accent-alt)" }}>40% Off</span>
+                <span className="gold-gradient-text italic font-serif">
+                  40% OFF
+                </span>
                 <br />
-                Selected Items
+                Selected Products
               </h2>
 
-              <p className="text-white/60 text-base mb-6 leading-relaxed">
-                Discover handpicked deals across home, kitchen, and electronics.
-                Free delivery included on all sale items.
+              <p className="text-slate-300 text-base md:text-lg mb-8 leading-relaxed font-normal">
+                Elevate your home with handpicked essentials on sale this week. Free delivery nationwide included.
               </p>
 
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-4">
                 <Link href="/shop?filter=sale">
                   <Button
                     variant="accent"
                     size="lg"
-                    rightIcon={<ArrowRight size={16} />}
+                    className="btn-gold-glow text-base font-semibold px-8 h-13"
+                    rightIcon={<ArrowRight size={18} />}
                   >
                     Shop the Sale
                   </Button>
                 </Link>
                 <Link href="/shop">
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     size="lg"
-                    className="text-white/70 hover:text-white hover:bg-white/10"
+                    className="border-white/20 text-white hover:bg-white/10 hover:border-white/40 h-13 px-7 text-base"
                   >
-                    Browse All
+                    Browse Catalog
                   </Button>
                 </Link>
               </div>
             </div>
 
-            {/* Right side decoration */}
-            <div className="hidden md:flex absolute right-8 top-1/2 -translate-y-1/2 flex-col items-center gap-4 text-white/20 pointer-events-none" aria-hidden="true">
-              <div className="text-8xl font-display font-bold" style={{ fontFamily: "var(--font-display)" }}>
-                40
+            {/* Big 40% OFF Visual Badge (desktop) */}
+            <div className="hidden md:flex absolute right-12 top-1/2 -translate-y-1/2 flex-col items-center justify-center pointer-events-none select-none" aria-hidden="true">
+              <div className="w-52 h-52 rounded-full border-2 border-amber-500/30 bg-amber-500/10 backdrop-blur-md flex flex-col items-center justify-center shadow-gold">
+                <span className="text-6xl font-display font-bold gold-gradient-text" style={{ fontFamily: "var(--font-display)" }}>
+                  40%
+                </span>
+                <span className="text-sm font-semibold tracking-widest text-amber-200 uppercase mt-1">
+                  OFF SALE
+                </span>
               </div>
-              <div className="text-2xl font-bold">% OFF</div>
             </div>
           </div>
         </FadeIn>

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Heart, ShoppingBag, Eye } from "lucide-react";
+import { Heart, ShoppingBag } from "lucide-react";
 import type { Product } from "@/lib/data";
 import { useCart } from "@/hooks/useCart";
 import { useWishlist } from "@/hooks/useWishlist";
@@ -27,7 +27,7 @@ const BADGE_VARIANT_MAP: Record<string, "new" | "sale" | "hot" | "featured"> = {
   featured: "featured",
 };
 
-export function ProductCard({ product, priority = false, showQuickView = true }: ProductCardProps) {
+export function ProductCard({ product, priority = false }: ProductCardProps) {
   const [imageIndex, setImageIndex] = useState(0);
   const [adding, setAdding] = useState(false);
   const prefersReduced = useReducedMotion();
@@ -52,15 +52,15 @@ export function ProductCard({ product, priority = false, showQuickView = true }:
   };
 
   return (
-    <article className="group relative" aria-label={product.name}>
-      <Link href={`/shop/${product.slug}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring] rounded-[--radius-xl]">
-        {/* ---- Image container ---- */}
+    <article className="group relative bg-[--color-surface] rounded-[--radius-xl] border border-[--color-border] hover:border-amber-500/40 shadow-[--shadow-card] hover:shadow-[--shadow-lg] transition-all duration-300 flex flex-col h-full overflow-hidden">
+      <Link href={`/shop/${product.slug}`} className="block flex-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring]">
+        {/* ---- Image Container ---- */}
         <div
-          className="relative overflow-hidden rounded-[--radius-xl] bg-[--color-muted] aspect-[3/4]"
+          className="relative overflow-hidden bg-slate-100 aspect-[3/4]"
           onMouseEnter={() => product.images[1] && setImageIndex(1)}
           onMouseLeave={() => setImageIndex(0)}
         >
-          {/* Primary image */}
+          {/* Primary Image */}
           <Image
             src={product.images[0]}
             alt={product.name}
@@ -68,12 +68,12 @@ export function ProductCard({ product, priority = false, showQuickView = true }:
             priority={priority}
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             className={cn(
-              "object-cover transition-all duration-500",
+              "object-cover transition-all duration-700 ease-out",
               imageIndex === 1 && !prefersReduced ? "opacity-0 scale-105" : "opacity-100 scale-100"
             )}
           />
 
-          {/* Secondary image (hover crossfade) */}
+          {/* Secondary Image Crossfade */}
           {product.images[1] && (
             <Image
               src={product.images[1]}
@@ -81,7 +81,7 @@ export function ProductCard({ product, priority = false, showQuickView = true }:
               fill
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               className={cn(
-                "object-cover transition-all duration-500",
+                "object-cover transition-all duration-700 ease-out",
                 imageIndex === 1 && !prefersReduced ? "opacity-100 scale-100" : "opacity-0 scale-105"
               )}
             />
@@ -102,19 +102,17 @@ export function ProductCard({ product, priority = false, showQuickView = true }:
             </div>
           )}
 
-          {/* ---- Wishlist button ---- */}
+          {/* ---- Wishlist Heart Button ---- */}
           <div className="absolute top-3 right-3 z-10">
             <motion.button
               onClick={handleWishlist}
               variants={heartVariants}
               animate={isWishlisted ? "liked" : "unliked"}
               className={cn(
-                "flex items-center justify-center w-9 h-9 rounded-full transition-all",
-                "bg-[--color-surface]/90 shadow-[--shadow-sm] backdrop-blur-sm",
-                "hover:bg-[--color-surface] hover:shadow-[--shadow-md]",
+                "flex items-center justify-center w-9 h-9 rounded-full transition-all duration-200",
+                "bg-white/90 shadow-md backdrop-blur-md hover:bg-white hover:scale-110",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring]",
-                "touch-manipulation",
-                "opacity-0 group-hover:opacity-100 focus:opacity-100"
+                "touch-manipulation"
               )}
               aria-label={isWishlisted ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
               aria-pressed={isWishlisted}
@@ -125,34 +123,18 @@ export function ProductCard({ product, priority = false, showQuickView = true }:
                 className={cn(
                   "transition-colors duration-200",
                   isWishlisted
-                    ? "fill-[--color-destructive] text-[--color-destructive]"
-                    : "text-[--color-fg]"
+                    ? "fill-rose-500 text-rose-500"
+                    : "text-slate-700 group-hover:text-amber-600"
                 )}
               />
             </motion.button>
           </div>
 
-          {/* ---- Quick add overlay ---- */}
-          <AnimatePresence>
-            <motion.div
-              className="absolute bottom-0 left-0 right-0 p-3"
-              initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 12 }}
-              whileHover={{ opacity: 1, y: 0 }}
-              animate={
-                prefersReduced
-                  ? {}
-                  : { opacity: 0, y: 12 }
-              }
-            >
-              {/* Invisible hover area trick — handled via group hover in CSS */}
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Add to cart — slides up on hover */}
+          {/* ---- Add to Cart Hover Slide Up ---- */}
           <div
             className={cn(
-              "absolute bottom-0 left-0 right-0 p-2.5 translate-y-full group-hover:translate-y-0",
-              "transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]",
+              "absolute bottom-0 left-0 right-0 p-3 translate-y-full group-hover:translate-y-0",
+              "transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] bg-gradient-to-t from-slate-900/60 to-transparent pt-8",
               prefersReduced && "translate-y-0 transition-none"
             )}
           >
@@ -161,11 +143,10 @@ export function ProductCard({ product, priority = false, showQuickView = true }:
               disabled={adding || !product.inStock}
               className={cn(
                 "w-full flex items-center justify-center gap-2 h-10 rounded-[--radius-lg]",
-                "bg-[--color-primary] text-[--color-primary-fg] text-sm font-semibold",
-                "hover:bg-[--color-primary-hover] active:scale-[0.98] transition-all",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring]",
-                "disabled:opacity-50 disabled:cursor-not-allowed",
-                "touch-manipulation shadow-[--shadow-md]"
+                "bg-[#090D16] text-white text-sm font-semibold hover:bg-amber-600 active:scale-[0.98] transition-all duration-200",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500",
+                "disabled:opacity-50 disabled:cursor-not-allowed shadow-lg",
+                "touch-manipulation"
               )}
               aria-label={
                 !product.inStock
@@ -197,27 +178,38 @@ export function ProductCard({ product, priority = false, showQuickView = true }:
           </div>
         </div>
 
-        {/* ---- Product info ---- */}
-        <div className="pt-3 px-0.5 space-y-1.5">
-          {/* Category */}
-          <p className="text-xs text-[--color-muted-fg] uppercase tracking-wide font-medium">
-            {product.category}
-          </p>
+        {/* ---- Info Block ---- */}
+        <div className="p-4 space-y-2 flex flex-col flex-1">
+          {/* Category & Stock */}
+          <div className="flex items-center justify-between gap-2 text-xs">
+            <span className="font-semibold text-amber-600 uppercase tracking-wider">
+              {product.category}
+            </span>
+            {product.inStock && (
+              <span className="text-[11px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
+                In Stock
+              </span>
+            )}
+          </div>
 
-          {/* Name */}
-          <h3 className="text-sm font-semibold leading-snug text-[--color-fg] line-clamp-2 group-hover:text-[--color-accent] transition-colors">
+          {/* Title */}
+          <h3 className="text-sm font-semibold leading-snug text-slate-900 line-clamp-2 group-hover:text-amber-600 transition-colors">
             {product.name}
           </h3>
 
           {/* Rating */}
-          <Rating value={product.rating} count={product.reviewCount} size="sm" />
+          <div className="mt-auto pt-1">
+            <Rating value={product.rating} count={product.reviewCount} size="sm" />
+          </div>
 
           {/* Price */}
-          <Price
-            price={product.price}
-            compareAtPrice={product.compareAtPrice}
-            size="md"
-          />
+          <div className="pt-1">
+            <Price
+              price={product.price}
+              compareAtPrice={product.compareAtPrice}
+              size="md"
+            />
+          </div>
         </div>
       </Link>
     </article>

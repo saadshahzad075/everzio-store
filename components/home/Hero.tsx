@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, ShieldCheck, Truck, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 export function Hero() {
@@ -11,7 +11,7 @@ export function Hero() {
   const containerVariants = {
     hidden: {},
     visible: {
-      transition: { staggerChildren: prefersReduced ? 0 : 0.12, delayChildren: 0.2 },
+      transition: { staggerChildren: prefersReduced ? 0 : 0.12, delayChildren: 0.15 },
     },
   };
 
@@ -26,152 +26,152 @@ export function Hero() {
 
   return (
     <section
-      className="relative min-h-[90dvh] flex items-center overflow-hidden bg-[--color-primary]"
+      className="relative min-h-[92dvh] flex items-center overflow-hidden bg-[#090D16]"
       aria-label="Hero section"
     >
-      {/* ---- Background pattern ---- */}
+      {/* ---- Ambient Lighting & Mesh Background ---- */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        {/* Gradient mesh */}
+        {/* Radial Gold & Indigo Gradients */}
         <div
-          className="absolute inset-0 opacity-30"
+          className="absolute inset-0 opacity-40"
           style={{
             background: `
-              radial-gradient(ellipse 80% 60% at 70% 40%, rgba(161,98,7,0.25) 0%, transparent 70%),
-              radial-gradient(ellipse 60% 80% at 10% 80%, rgba(202,138,4,0.12) 0%, transparent 60%)
+              radial-gradient(ellipse 70% 60% at 75% 35%, rgba(217,119,6,0.3) 0%, transparent 70%),
+              radial-gradient(ellipse 50% 70% at 15% 75%, rgba(245,158,11,0.2) 0%, transparent 65%),
+              radial-gradient(ellipse 90% 90% at 50% 50%, rgba(15,23,42,0.95) 0%, transparent 100%)
             `,
           }}
         />
-        {/* Grid lines */}
+
+        {/* Subtle Grid Pattern Overlay */}
         <div
-          className="absolute inset-0 opacity-5"
+          className="absolute inset-0 opacity-10"
           style={{
-            backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-            backgroundSize: "60px 60px",
+            backgroundImage: `linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)`,
+            backgroundSize: "48px 48px",
           }}
         />
-        {/* Floating orbs */}
+
+        {/* Floating Pulsing Glowing Orbs */}
         {!prefersReduced && (
           <>
             <motion.div
-              className="absolute w-64 h-64 rounded-full blur-3xl opacity-15"
+              className="absolute w-96 h-96 rounded-full blur-[120px] opacity-25"
               style={{
-                background: "radial-gradient(circle, #CA8A04, transparent)",
-                top: "20%",
-                right: "15%",
+                background: "radial-gradient(circle, #F59E0B, transparent)",
+                top: "15%",
+                right: "12%",
               }}
-              animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.25, 0.15] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              animate={{ scale: [1, 1.15, 1], opacity: [0.25, 0.35, 0.25] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
             />
             <motion.div
-              className="absolute w-48 h-48 rounded-full blur-3xl opacity-10"
+              className="absolute w-72 h-72 rounded-full blur-[100px] opacity-20"
               style={{
-                background: "radial-gradient(circle, #A16207, transparent)",
-                bottom: "25%",
-                left: "8%",
+                background: "radial-gradient(circle, #D97706, transparent)",
+                bottom: "20%",
+                left: "5%",
               }}
-              animate={{ scale: [1, 1.15, 1], opacity: [0.1, 0.2, 0.1] }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.3, 0.2] }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             />
           </>
         )}
       </div>
 
-      {/* ---- Content ---- */}
-      <div className="everzio-container relative z-10">
+      {/* ---- Hero Content ---- */}
+      <div className="everzio-container relative z-10 py-16 md:py-24">
         <div className="max-w-3xl">
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="space-y-6"
+            className="space-y-7"
           >
-            {/* Campaign badge */}
+            {/* Live Campaign Pill */}
             <motion.div variants={itemVariants}>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[--radius-pill] bg-white/10 border border-white/20 text-white/90 text-xs font-medium tracking-wide backdrop-blur-sm">
-                <Sparkles size={12} aria-hidden="true" />
-                New Arrivals This Week
+              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-[--radius-pill] bg-white/10 border border-amber-500/30 text-amber-300 text-xs font-semibold tracking-wider uppercase backdrop-blur-md shadow-sm">
+                <Sparkles size={13} className="text-amber-400" aria-hidden="true" />
+                Exclusive New Collection 2026
               </span>
             </motion.div>
 
-            {/* Headline */}
+            {/* Editorial Display Headline */}
             <motion.h1
               variants={itemVariants}
-              className="font-display text-white leading-[1.05]"
+              className="font-display text-white leading-[1.04]"
               style={{
                 fontFamily: "var(--font-display)",
-                fontSize: "clamp(2.5rem, 7vw, 5.5rem)",
+                fontSize: "clamp(2.75rem, 7.5vw, 5.75rem)",
                 fontWeight: 600,
+                letterSpacing: "-0.01em",
               }}
             >
-              Products That
+              Curated Luxury
               <br />
-              <em className="not-italic" style={{ color: "var(--color-accent-alt)" }}>
-                Elevate
-              </em>{" "}
-              Your Life
+              For Your{" "}
+              <span className="gold-gradient-text italic font-serif">
+                Modern Life
+              </span>
             </motion.h1>
 
-            {/* Subheading */}
+            {/* Subtitle */}
             <motion.p
               variants={itemVariants}
-              className="text-white/70 text-lg leading-relaxed max-w-xl"
-              style={{ fontFamily: "var(--font-body)" }}
+              className="text-slate-300 text-lg md:text-xl leading-relaxed max-w-xl font-normal"
             >
-              Premium home, kitchen, and lifestyle products — curated for
-              modern living in Pakistan. Smart choices, delivered simply.
+              Discover handpicked home, kitchen, and lifestyle essentials crafted for elegance. Fast nationwide delivery & Cash on Delivery across Pakistan.
             </motion.p>
 
-            {/* CTAs */}
-            <motion.div variants={itemVariants} className="flex flex-wrap gap-3">
+            {/* Action Buttons */}
+            <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-4 pt-2">
               <Link href="/shop">
                 <Button
                   variant="accent"
                   size="lg"
-                  rightIcon={<ArrowRight size={16} />}
+                  className="btn-gold-glow text-base font-semibold px-8 h-13 shadow-gold"
+                  rightIcon={<ArrowRight size={18} />}
                 >
-                  Shop Now
+                  Explore Collection
                 </Button>
               </Link>
               <Link href="/shop?filter=bestsellers">
                 <Button
                   variant="outline"
                   size="lg"
-                  className="border-white/30 text-white hover:bg-white/10 hover:border-white/50"
+                  className="border-white/20 text-white hover:bg-white/10 hover:border-white/40 h-13 px-7 text-base backdrop-blur-sm"
                 >
                   Best Sellers
                 </Button>
               </Link>
             </motion.div>
 
-            {/* Social proof */}
+            {/* Value Props Strip */}
             <motion.div
               variants={itemVariants}
-              className="flex items-center gap-4 pt-2"
+              className="pt-6 border-t border-white/10 grid grid-cols-3 gap-4 max-w-lg"
             >
-              <div className="flex -space-x-2">
-                {[1, 2, 3, 4].map((i) => (
-                  <div
-                    key={i}
-                    className="w-8 h-8 rounded-full border-2 border-[--color-primary] bg-[--color-muted] overflow-hidden"
-                    aria-hidden="true"
-                    style={{
-                      background: `hsl(${i * 40 + 20}, 30%, 70%)`,
-                    }}
-                  />
-                ))}
+              <div className="flex items-center gap-2 text-slate-300 text-xs sm:text-sm font-medium">
+                <Truck size={16} className="text-amber-400 flex-shrink-0" />
+                <span>Free Shipping</span>
               </div>
-              <p className="text-sm text-white/60">
-                <span className="text-white font-semibold">10,000+</span> happy customers across Pakistan
-              </p>
+              <div className="flex items-center gap-2 text-slate-300 text-xs sm:text-sm font-medium">
+                <ShieldCheck size={16} className="text-amber-400 flex-shrink-0" />
+                <span>100% Genuine</span>
+              </div>
+              <div className="flex items-center gap-2 text-slate-300 text-xs sm:text-sm font-medium">
+                <RotateCcw size={16} className="text-amber-400 flex-shrink-0" />
+                <span>Easy Returns</span>
+              </div>
             </motion.div>
           </motion.div>
         </div>
       </div>
 
-      {/* ---- Bottom gradient fade ---- */}
+      {/* Bottom Gradient Fade */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none"
+        className="absolute bottom-0 left-0 right-0 h-28 pointer-events-none"
         style={{
           background: "linear-gradient(to top, var(--color-bg), transparent)",
         }}

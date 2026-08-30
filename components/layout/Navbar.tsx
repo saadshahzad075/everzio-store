@@ -1,115 +1,46 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { ShoppingBag, Search, Heart, Menu, X, ChevronDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ShoppingBag,
+  Heart,
+  Search,
+  Menu,
+  X,
+  ChevronDown,
+  Sparkles,
+} from "lucide-react";
+import { CATEGORIES } from "@/lib/data";
 import { useCart } from "@/hooks/useCart";
 import { useWishlist } from "@/hooks/useWishlist";
 import { cn } from "@/lib/utils";
-import { CATEGORIES } from "@/lib/data";
 
-// ---------------------------------------------------------------------------
-// Desktop nav links
-// ---------------------------------------------------------------------------
-const NAV_LINKS = [
-  { label: "Shop", href: "/shop" },
-  { label: "New Arrivals", href: "/shop?filter=new" },
-  { label: "Best Sellers", href: "/shop?filter=bestsellers" },
-  { label: "Deals", href: "/shop?filter=sale" },
-];
-
-// ---------------------------------------------------------------------------
-// Cart badge
-// ---------------------------------------------------------------------------
-function CartBadge({ count }: { count: number }) {
-  if (count === 0) return null;
-  return (
-    <motion.span
-      key={count}
-      initial={{ scale: 0 }}
-      animate={{ scale: 1 }}
-      className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-[--color-accent] text-[--color-accent-fg] text-[10px] font-bold flex items-center justify-center tabular-nums leading-none"
-      aria-hidden="true"
-    >
-      {count > 99 ? "99+" : count}
-    </motion.span>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Category megamenu
-// ---------------------------------------------------------------------------
-function CategoryMenu() {
-  return (
-    <div className="grid grid-cols-3 gap-6 p-6 min-w-[560px]">
-      {CATEGORIES.map((cat) => (
-        <Link
-          key={cat.id}
-          href={`/shop?category=${cat.slug}`}
-          className="group flex items-center gap-3 p-2 rounded-[--radius-md] hover:bg-[--color-muted] transition-colors duration-150"
-        >
-          <span className="flex flex-col">
-            <span className="font-semibold text-sm text-[--color-fg] group-hover:text-[--color-accent] transition-colors">
-              {cat.name}
-            </span>
-            <span className="text-xs text-[--color-muted-fg]">
-              {cat.productCount} products
-            </span>
-          </span>
-        </Link>
-      ))}
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Main Navbar
-// ---------------------------------------------------------------------------
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [shopOpen, setShopOpen] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const shopMenuRef = useRef<HTMLDivElement>(null);
-  const prefersReduced = useReducedMotion();
-  const { totalItems, openCart } = useCart();
-  const { count: wishlistCount } = useWishlist();
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // Scroll detection
+  const { totalItems, openCart } = useCart();
+  const { totalItems: wishlistCount } = useWishlist();
+
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Close mobile menu on resize
-  useEffect(() => {
-    const handleResize = () => { if (window.innerWidth >= 1024) setMobileOpen(false); };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // Close shop menu on outside click
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (shopMenuRef.current && !shopMenuRef.current.contains(e.target as Node)) {
-        setShopOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
   }, []);
 
   return (
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-[--z-sticky] transition-all",
-          "duration-300 ease-in-out",
+          "fixed top-0 left-0 right-0 z-[--z-sticky] transition-all duration-300 ease-in-out",
           scrolled
-            ? "glass-surface shadow-[--shadow-md] border-b border-[--color-border]"
-            : "bg-transparent"
+            ? "glass-panel shadow-md border-b border-slate-200/80"
+            : "bg-white/80 backdrop-blur-md border-b border-slate-100"
         )}
         style={{ top: "var(--announcement-height)" }}
       >
@@ -117,32 +48,34 @@ export function Navbar() {
           className="everzio-container flex items-center justify-between h-[--navbar-height]"
           aria-label="Main navigation"
         >
-          {/* ---- Logo ---- */}
+          {/* ---- Brand logo ---- */}
           <Link
             href="/"
-            className="flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring] rounded-sm"
+            className="flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring] rounded-sm group"
             aria-label="EVERZIO — Home"
           >
+            <div className="w-8 h-8 rounded-lg bg-[#090D16] text-amber-400 flex items-center justify-center font-bold font-display text-lg group-hover:scale-105 transition-transform shadow-sm">
+              E
+            </div>
             <span
-              className="font-display text-2xl font-bold tracking-[0.12em] uppercase text-[--color-fg]"
+              className="font-display text-2xl font-bold tracking-[0.14em] uppercase text-slate-900"
               style={{ fontFamily: "var(--font-display)" }}
             >
               EVERZIO
             </span>
           </Link>
 
-          {/* ---- Desktop Nav ---- */}
-          <div className="hidden lg:flex items-center gap-1">
+          {/* ---- Desktop Nav Links ---- */}
+          <div className="hidden lg:flex items-center gap-2">
             {/* Categories dropdown */}
-            <div ref={shopMenuRef} className="relative">
+            <div
+              className="relative"
+              onMouseEnter={() => setCategoriesOpen(true)}
+              onMouseLeave={() => setCategoriesOpen(false)}
+            >
               <button
-                className={cn(
-                  "flex items-center gap-1 px-3 py-2 rounded-[--radius-md] text-sm font-medium",
-                  "text-[--color-fg] hover:bg-[--color-primary-muted] transition-colors",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring]"
-                )}
-                onClick={() => setShopOpen((p) => !p)}
-                aria-expanded={shopOpen}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-[--radius-md] text-sm font-semibold text-slate-800 hover:text-amber-600 hover:bg-slate-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring]"
+                aria-expanded={categoriesOpen}
                 aria-haspopup="true"
               >
                 Categories
@@ -150,214 +83,267 @@ export function Navbar() {
                   size={14}
                   className={cn(
                     "transition-transform duration-200",
-                    shopOpen && "rotate-180"
+                    categoriesOpen && "rotate-180 text-amber-600"
                   )}
                   aria-hidden="true"
                 />
               </button>
 
               <AnimatePresence>
-                {shopOpen && (
+                {categoriesOpen && (
                   <motion.div
-                    initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: -8, scale: 0.97 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={prefersReduced ? { opacity: 0 } : { opacity: 0, y: -8, scale: 0.97 }}
-                    transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
-                    className="absolute top-full left-0 mt-2 bg-[--color-surface] rounded-[--radius-xl] shadow-[--shadow-xl] border border-[--color-border] z-[--z-dropdown]"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute top-full left-0 w-64 p-3 bg-white rounded-[--radius-xl] shadow-xl border border-slate-200/90 z-[--z-dropdown]"
                   >
-                    <CategoryMenu />
+                    <div className="text-[11px] font-bold text-amber-600 uppercase tracking-wider px-3 py-1 mb-1 flex items-center gap-1">
+                      <Sparkles size={12} />
+                      Curated Collections
+                    </div>
+                    {CATEGORIES.map((cat) => (
+                      <Link
+                        key={cat.id}
+                        href={`/shop?category=${cat.slug}`}
+                        className="flex items-center justify-between px-3 py-2 rounded-[--radius-md] text-sm font-medium text-slate-700 hover:text-amber-600 hover:bg-amber-50/60 transition-colors"
+                        onClick={() => setCategoriesOpen(false)}
+                      >
+                        {cat.name}
+                        <span className="text-xs text-slate-400 font-normal">
+                          {cat.productCount}
+                        </span>
+                      </Link>
+                    ))}
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
-            {/* Other nav links */}
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "px-3 py-2 rounded-[--radius-md] text-sm font-medium",
-                  "text-[--color-fg] hover:bg-[--color-primary-muted] transition-colors",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring]"
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
+            <Link
+              href="/shop"
+              className="px-3.5 py-2 rounded-[--radius-md] text-sm font-semibold text-slate-800 hover:text-amber-600 hover:bg-slate-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring]"
+            >
+              Shop
+            </Link>
+            <Link
+              href="/shop?filter=new"
+              className="px-3.5 py-2 rounded-[--radius-md] text-sm font-semibold text-slate-800 hover:text-amber-600 hover:bg-slate-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring]"
+            >
+              New Arrivals
+            </Link>
+            <Link
+              href="/shop?filter=bestsellers"
+              className="px-3.5 py-2 rounded-[--radius-md] text-sm font-semibold text-slate-800 hover:text-amber-600 hover:bg-slate-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring]"
+            >
+              Best Sellers
+            </Link>
+            <Link
+              href="/shop?filter=sale"
+              className="px-3.5 py-2 rounded-[--radius-md] text-sm font-semibold text-amber-600 hover:text-amber-700 hover:bg-amber-50/60 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring]"
+            >
+              Deals 🔥
+            </Link>
           </div>
 
-          {/* ---- Action Icons ---- */}
-          <div className="flex items-center gap-1">
-            {/* Search */}
+          {/* ---- Actions ---- */}
+          <div className="flex items-center gap-1.5">
+            {/* Search trigger */}
             <button
               onClick={() => setSearchOpen(true)}
-              className="relative flex items-center justify-center w-10 h-10 rounded-[--radius-md] text-[--color-fg] hover:bg-[--color-primary-muted] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring] touch-manipulation"
+              className="relative flex items-center justify-center w-10 h-10 rounded-[--radius-md] text-slate-700 hover:bg-slate-100 hover:text-amber-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring] touch-manipulation"
               aria-label="Search products"
             >
-              <Search size={18} aria-hidden="true" />
+              <Search size={19} aria-hidden="true" />
             </button>
 
             {/* Wishlist */}
             <Link
               href="/wishlist"
-              className="relative flex items-center justify-center w-10 h-10 rounded-[--radius-md] text-[--color-fg] hover:bg-[--color-primary-muted] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring] touch-manipulation"
-              aria-label={`Wishlist, ${wishlistCount} item${wishlistCount !== 1 ? "s" : ""}`}
+              className="relative flex items-center justify-center w-10 h-10 rounded-[--radius-md] text-slate-700 hover:bg-slate-100 hover:text-rose-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring] touch-manipulation"
+              aria-label={`Wishlist, ${wishlistCount} items`}
             >
-              <Heart size={18} aria-hidden="true" />
+              <Heart size={19} aria-hidden="true" />
               {wishlistCount > 0 && (
-                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-[--color-primary] text-[--color-primary-fg] text-[10px] font-bold flex items-center justify-center leading-none" aria-hidden="true">
+                <span className="absolute -top-1 -right-1 flex items-center justify-center w-4 h-4 rounded-full bg-rose-500 text-white text-[10px] font-bold">
                   {wishlistCount}
                 </span>
               )}
             </Link>
 
-            {/* Cart */}
+            {/* Cart trigger */}
             <button
               onClick={openCart}
-              className="relative flex items-center justify-center w-10 h-10 rounded-[--radius-md] text-[--color-fg] hover:bg-[--color-primary-muted] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring] touch-manipulation"
-              aria-label={`Shopping cart, ${totalItems} item${totalItems !== 1 ? "s" : ""}`}
+              className="relative flex items-center justify-center w-10 h-10 rounded-[--radius-md] text-slate-700 hover:bg-slate-100 hover:text-amber-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring] touch-manipulation"
+              aria-label={`Shopping cart, ${totalItems} items`}
             >
-              <ShoppingBag size={18} aria-hidden="true" />
-              <CartBadge count={totalItems} />
+              <ShoppingBag size={19} aria-hidden="true" />
+              {totalItems > 0 && (
+                <motion.span
+                  key={totalItems}
+                  initial={{ scale: 0.5 }}
+                  animate={{ scale: 1 }}
+                  className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 rounded-full bg-amber-500 text-white text-[11px] font-bold shadow-md"
+                >
+                  {totalItems}
+                </motion.span>
+              )}
             </button>
 
-            {/* Mobile menu toggle */}
+            {/* Mobile menu trigger */}
             <button
-              className="lg:hidden flex items-center justify-center w-10 h-10 rounded-[--radius-md] text-[--color-fg] hover:bg-[--color-primary-muted] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring] touch-manipulation"
-              onClick={() => setMobileOpen(true)}
+              onClick={() => setMobileMenuOpen(true)}
+              className="lg:hidden flex items-center justify-center w-10 h-10 rounded-[--radius-md] text-slate-700 hover:bg-slate-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring] touch-manipulation"
               aria-label="Open navigation menu"
-              aria-expanded={mobileOpen}
+              aria-expanded={mobileMenuOpen}
             >
-              <Menu size={18} aria-hidden="true" />
+              <Menu size={20} aria-hidden="true" />
             </button>
           </div>
         </nav>
       </header>
 
-      {/* Offset for fixed header */}
+      {/* Spacer */}
       <div
-        style={{ height: "calc(var(--navbar-height) + var(--announcement-height))" }}
+        style={{
+          height: "calc(var(--navbar-height) + var(--announcement-height))",
+        }}
         aria-hidden="true"
       />
-
-      {/* ---- Mobile Menu ---- */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              className="fixed inset-0 z-[--z-overlay] bg-black/50"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setMobileOpen(false)}
-              aria-hidden="true"
-            />
-
-            {/* Drawer */}
-            <motion.div
-              className="fixed top-0 right-0 bottom-0 z-[--z-drawer] w-80 bg-[--color-surface] shadow-[--shadow-xl] flex flex-col"
-              initial={prefersReduced ? { opacity: 0 } : { x: "100%" }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={prefersReduced ? { opacity: 0 } : { x: "100%" }}
-              transition={{ type: "spring", stiffness: 300, damping: 35 }}
-              role="dialog"
-              aria-modal="true"
-              aria-label="Navigation menu"
-            >
-              {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b border-[--color-border]">
-                <span className="font-display text-xl font-bold tracking-widest">EVERZIO</span>
-                <button
-                  onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-center w-10 h-10 rounded-[--radius-md] hover:bg-[--color-muted] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-ring]"
-                  aria-label="Close navigation menu"
-                >
-                  <X size={18} aria-hidden="true" />
-                </button>
-              </div>
-
-              {/* Nav items */}
-              <nav className="flex-1 overflow-y-auto p-4 space-y-1">
-                {NAV_LINKS.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="flex items-center px-3 py-3 rounded-[--radius-md] text-base font-medium text-[--color-fg] hover:bg-[--color-muted] transition-colors"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-
-                <div className="pt-2 pb-1">
-                  <p className="px-3 text-xs font-semibold text-[--color-muted-fg] uppercase tracking-wider mb-1">
-                    Categories
-                  </p>
-                </div>
-
-                {CATEGORIES.map((cat) => (
-                  <Link
-                    key={cat.id}
-                    href={`/shop?category=${cat.slug}`}
-                    className="flex items-center justify-between px-3 py-2.5 rounded-[--radius-md] text-sm text-[--color-fg] hover:bg-[--color-muted] transition-colors"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    <span>{cat.name}</span>
-                    <span className="text-xs text-[--color-muted-fg]">
-                      {cat.productCount}
-                    </span>
-                  </Link>
-                ))}
-              </nav>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
 
       {/* ---- Search Overlay ---- */}
       <AnimatePresence>
         {searchOpen && (
-          <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[--z-modal] bg-slate-900/60 backdrop-blur-md flex items-start justify-center pt-24 px-4"
+            onClick={() => setSearchOpen(false)}
+          >
             <motion.div
-              className="fixed inset-0 z-[--z-overlay] bg-black/60"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSearchOpen(false)}
-              aria-hidden="true"
-            />
-            <motion.div
-              className="fixed top-0 left-0 right-0 z-[--z-modal] p-4"
-              initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={prefersReduced ? { opacity: 0 } : { opacity: 0, y: -20 }}
-              transition={{ duration: 0.2 }}
+              initial={{ scale: 0.95, y: -10 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: -10 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-xl bg-white rounded-[--radius-2xl] shadow-2xl p-4 border border-slate-200"
             >
-              <div className="everzio-container">
-                <div className="bg-[--color-surface] rounded-[--radius-xl] shadow-[--shadow-xl] border border-[--color-border] p-4">
-                  <div className="flex items-center gap-3">
-                    <Search size={20} className="text-[--color-muted-fg] flex-shrink-0" aria-hidden="true" />
-                    <input
-                      autoFocus
-                      type="search"
-                      placeholder="Search products, categories…"
-                      className="flex-1 bg-transparent text-base text-[--color-fg] placeholder:text-[--color-muted-fg] focus:outline-none"
-                      aria-label="Search products"
-                    />
-                    <button
+              <div className="flex items-center gap-3 border-b border-slate-200 pb-3">
+                <Search size={20} className="text-amber-500 flex-shrink-0" />
+                <input
+                  type="text"
+                  autoFocus
+                  placeholder="Search products, categories, keywords…"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full text-base bg-transparent focus:outline-none text-slate-900 placeholder:text-slate-400"
+                />
+                <button
+                  onClick={() => setSearchOpen(false)}
+                  className="p-1 rounded-md text-slate-400 hover:text-slate-700"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div className="pt-3">
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                  Popular Searches
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {["Candle", "Earbuds", "Lamp", "Air Fryer", "Serving Board"].map((term) => (
+                    <Link
+                      key={term}
+                      href={`/shop?search=${encodeURIComponent(term)}`}
                       onClick={() => setSearchOpen(false)}
-                      className="flex items-center justify-center w-8 h-8 rounded-[--radius-md] hover:bg-[--color-muted] transition-colors"
-                      aria-label="Close search"
+                      className="px-3 py-1 bg-slate-100 hover:bg-amber-50 hover:text-amber-700 text-xs font-medium rounded-full text-slate-700 transition-colors"
                     >
-                      <X size={16} aria-hidden="true" />
-                    </button>
-                  </div>
+                      {term}
+                    </Link>
+                  ))}
                 </div>
               </div>
             </motion.div>
-          </>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ---- Mobile Navigation Drawer ---- */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: "-100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: "-100%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="fixed inset-0 z-[--z-drawer] bg-white flex flex-col p-6 overflow-y-auto"
+          >
+            <div className="flex items-center justify-between pb-6 border-b border-slate-100">
+              <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-[#090D16] text-amber-400 flex items-center justify-center font-bold font-display text-lg">
+                  E
+                </div>
+                <span className="font-display text-xl font-bold uppercase tracking-wider text-slate-900">
+                  EVERZIO
+                </span>
+              </Link>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-700"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <nav className="py-6 space-y-4 flex-1">
+              <Link
+                href="/shop"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-lg font-semibold text-slate-900 hover:text-amber-600"
+              >
+                All Products
+              </Link>
+              <Link
+                href="/shop?filter=new"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-lg font-semibold text-slate-900 hover:text-amber-600"
+              >
+                New Arrivals
+              </Link>
+              <Link
+                href="/shop?filter=bestsellers"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-lg font-semibold text-slate-900 hover:text-amber-600"
+              >
+                Best Sellers
+              </Link>
+              <Link
+                href="/shop?filter=sale"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-lg font-semibold text-amber-600"
+              >
+                Deals & Offers 🔥
+              </Link>
+
+              <div className="pt-4 border-t border-slate-100">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
+                  Categories
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  {CATEGORIES.map((cat) => (
+                    <Link
+                      key={cat.id}
+                      href={`/shop?category=${cat.slug}`}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="p-2.5 bg-slate-50 rounded-lg text-xs font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-700"
+                    >
+                      {cat.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </nav>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

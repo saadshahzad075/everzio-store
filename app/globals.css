@@ -3,33 +3,33 @@
 @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap");
 
 /* ============================================================
-   EVERZIO — Design Tokens & Base Theme
+   EVERZIO — Luxury Color Tokens & Aesthetic Palette
    ============================================================ */
 :root {
-  /* -- Core Palette -- */
+  /* -- Fonts -- */
   --font-display: 'Cormorant Garamond', Georgia, serif;
   --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 
-  /* Colors */
+  /* Surfaces & Backgrounds */
   --color-bg: #F8FAFC;
   --color-surface: #FFFFFF;
   --color-surface-elevated: #F1F5F9;
 
-  --color-fg: #0F172A;
+  --color-fg: #090D16;
   --color-muted-fg: #64748B;
 
-  /* Primary Brand - Deep Obsidian */
-  --color-primary: #0F172A;
+  /* Primary Brand — Midnight Obsidian */
+  --color-primary: #090D16;
   --color-primary-hover: #1E293B;
   --color-primary-fg: #FFFFFF;
-  --color-primary-muted: rgba(15, 23, 42, 0.05);
+  --color-primary-muted: rgba(9, 13, 22, 0.05);
 
   /* Secondary */
   --color-secondary: #F1F5F9;
-  --color-secondary-fg: #0F172A;
+  --color-secondary-fg: #090D16;
   --color-secondary-hover: #E2E8F0;
 
-  /* Luxury Accent - Electric Gold & Rose */
+  /* Luxury Accent — Electric Sunset Amber & Gold */
   --color-accent: #D97706;
   --color-accent-hover: #B45309;
   --color-accent-fg: #FFFFFF;
@@ -58,24 +58,25 @@
   --navbar-height: 68px;
 
   /* Radii */
-  --radius-xs: 4px;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
-  --radius-2xl: 28px;
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
   --radius-pill: 9999px;
 
   /* Shadows */
-  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
-  --shadow-sm: 0 2px 8px -2px rgba(15, 23, 42, 0.06);
-  --shadow-md: 0 8px 24px -6px rgba(15, 23, 42, 0.08);
-  --shadow-lg: 0 16px 36px -8px rgba(15, 23, 42, 0.12);
-  --shadow-xl: 0 24px 50px -12px rgba(15, 23, 42, 0.18);
-  --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+  --shadow-xs: 0 1px 3px 0 rgba(9, 13, 22, 0.03);
+  --shadow-sm: 0 4px 12px -2px rgba(9, 13, 22, 0.05);
+  --shadow-md: 0 10px 28px -6px rgba(9, 13, 22, 0.08);
+  --shadow-lg: 0 20px 40px -8px rgba(9, 13, 22, 0.12);
+  --shadow-xl: 0 30px 60px -12px rgba(9, 13, 22, 0.18);
+  --shadow-card: 0 8px 30px -4px rgba(9, 13, 22, 0.06);
+  --shadow-gold: 0 12px 30px -6px rgba(217, 119, 6, 0.3);
 }
 
-/* Base resets */
+/* Base Resets */
 * {
   border-color: var(--color-border);
 }
@@ -92,7 +93,7 @@ h1, h2, h3, .font-display {
   font-family: var(--font-display);
 }
 
-/* Custom Utilities */
+/* Custom Containers */
 .everzio-container {
   width: 100%;
   max-width: 1280px;
@@ -110,33 +111,59 @@ h1, h2, h3, .font-display {
 }
 
 .section-y {
-  padding-top: 4.5rem;
-  padding-bottom: 4.5rem;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
 }
 
 @media (max-width: 640px) {
   .section-y {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
   }
 }
 
-/* Glassmorphism */
+/* Frosted Glass Panels */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
 .glass-dark {
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(9, 13, 22, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-/* Marquee animation */
+/* Gradient Text Effect */
+.gold-gradient-text {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 50%, #B45309 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Glowing Accent Button */
+.btn-gold-glow {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  box-shadow: 0 8px 24px -4px rgba(217, 119, 6, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-gold-glow:hover {
+  box-shadow: 0 12px 32px -4px rgba(217, 119, 6, 0.6);
+  transform: translateY(-1px);
+}
+
+/* Infinite Marquee */
 @keyframes marquee {
   0% {
     transform: translateX(0%);
@@ -149,7 +176,7 @@ h1, h2, h3, .font-display {
 .animate-marquee {
   display: flex;
   width: max-content;
-  animation: marquee 25s linear infinite;
+  animation: marquee 24s linear infinite;
 }
 
 .animate-marquee:hover {
